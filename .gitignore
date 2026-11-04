@@ -1,0 +1,9 @@
+.DS_Store
+PLAN.md
+
+nginx-lab/logs/
+nginx-lab/cache/
+nginx-lab/cache_temp/
+nginx-lab/htpasswd
+nginx-lab/certs/*.key
+nginx-lab/certs/*.crt

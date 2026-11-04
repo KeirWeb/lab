@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <body>
+    <h1>site C</h1>
+    <p>origin: <span id="origin"></span></p>
+    <button type="button" id="go">запросить /api/ с site-b</button>
+    <pre id="out"></pre>
+    <script>
+      document.getElementById("origin").textContent = location.origin;
+      document.getElementById("go").onclick = function () {
+        document.getElementById("out").textContent = "…";
+        fetch("http://site-b.localhost:8080/api/", {
+          headers: { "X-Lab": "1" },
+        })
+          .then(function (r) {
+            return r.text().then(function (t) {
+              document.getElementById("out").textContent =
+                "status=" + r.status + "\n" + t;
+            });
+          })
+          .catch(function (e) {
+            document.getElementById("out").textContent = String(e);
+          });
+      };
+    </script>
+  </body>
+</html>
