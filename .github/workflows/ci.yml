@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    defaults:
+      run:
+        working-directory: nginx-lab
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: compose config
+        run: docker compose config
+
+      - name: build
+        run: docker compose build lab-nginx backend1
+
+      - name: login ghcr
+        if: github.event_name == 'push'
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: tag and push
+        if: github.event_name == 'push'
+        run: |
+          SHA=${GITHUB_SHA::7}
+          docker tag lab-nginx:local ghcr.io/${{ github.repository_owner }}/lab-nginx:$SHA
+          docker tag lab-backend:local ghcr.io/${{ github.repository_owner }}/lab-backend:$SHA
+          docker push ghcr.io/${{ github.repository_owner }}/lab-nginx:$SHA
+          docker push ghcr.io/${{ github.repository_owner }}/lab-backend:$SHA
