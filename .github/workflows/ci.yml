@@ -31,7 +31,8 @@ jobs:
         if: github.event_name == 'push'
         run: |
           SHA=${GITHUB_SHA::7}
-          docker tag lab-nginx:local ghcr.io/${{ github.repository_owner }}/lab-nginx:$SHA
-          docker tag lab-backend:local ghcr.io/${{ github.repository_owner }}/lab-backend:$SHA
-          docker push ghcr.io/${{ github.repository_owner }}/lab-nginx:$SHA
-          docker push ghcr.io/${{ github.repository_owner }}/lab-backend:$SHA
+          OWNER=${GITHUB_REPOSITORY_OWNER,,}
+          docker tag lab-nginx:local ghcr.io/$OWNER/lab-nginx:$SHA
+          docker tag lab-backend:local ghcr.io/$OWNER/lab-backend:$SHA
+          docker push ghcr.io/$OWNER/lab-nginx:$SHA
+          docker push ghcr.io/$OWNER/lab-backend:$SHA
