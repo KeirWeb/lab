@@ -1,0 +1,28 @@
+name: deploy
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "nginx-lab/docker-compose.prod.yml"
+  workflow_dispatch:
+
+jobs:
+  prod:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: deploy compose
+        env:
+          HOST: ${{ secrets.PROD_HOST }}
+          USER: ${{ secrets.PROD_USER }}
+          SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+
+          scp nginx-lab/docker-compose.prod.yml "$USER@$HOST:/opt/lab/compose.yml"
+          ssh "$USER@$HOST" 'cd /opt/lab && docker compose -f compose.yml pull && docker compose -f compose.yml up -d'
