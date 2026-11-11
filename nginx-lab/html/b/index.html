@@ -2,9 +2,20 @@
 <html>
   <body>
     <h1>site B</h1>
+    <p>upstream: <span id="upstream">…</span></p>
     <img
       src="https://images.panda.org/assets/images/pages/welcome/orangutan_1600x1000_279157.jpg"
       alt="placeholder"
     />
+    <script>
+      fetch("/api/")
+        .then((r) => {
+          document.getElementById("upstream").textContent =
+            r.headers.get("x-upstream") ?? "нет заголовка";
+        })
+        .catch((e) => {
+          document.getElementById("upstream").textContent = String(e);
+        });
+    </script>
   </body>
 </html>

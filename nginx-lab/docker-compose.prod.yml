@@ -1,0 +1,27 @@
+services:
+  lab-nginx:
+    image: ghcr.io/keirweb/lab-nginx:00a79d1
+    ports: ["${HOST_PORT:-8090}:80"]
+    # ports: ["8090:80"]
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  backend:
+    deploy:
+      replicas: 3
+    image: ghcr.io/keirweb/lab-backend:00a79d1
+    restart: unless-stopped
+    mem_limit: 64m
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
