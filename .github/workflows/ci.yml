@@ -21,7 +21,7 @@ jobs:
         run: docker compose config
 
       - name: build
-        run: docker compose build lab-nginx backend1
+        run: docker compose build lab-nginx backend
 
       - name: login ghcr
         if: github.event_name == 'push'
