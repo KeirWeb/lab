@@ -2,8 +2,12 @@ name: ci
 
 on:
   pull_request:
+    paths-ignore:
+      - "nginx-lab/docker-compose.prod.yml"
   push:
     branches: ["main"]
+    paths-ignore:
+      - "nginx-lab/docker-compose.prod.yml"
 
 jobs:
   build:
