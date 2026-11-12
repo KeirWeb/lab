@@ -1,7 +1,7 @@
 services:
   lab-nginx:
     image: ghcr.io/keirweb/lab-nginx:2ed83b1
-    ports: ["${HOST_PORT:-8090}:80"]
+    ports: ["127.0.0.1:${HOST_PORT:-8090}:80"]
     # ports: ["8090:80"]
     restart: unless-stopped
     depends_on:
