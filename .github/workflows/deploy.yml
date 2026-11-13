@@ -26,18 +26,18 @@ jobs:
 
           scp nginx-lab/docker-compose.prod.yml "$USER@$HOST:/opt/lab/compose.yml"
           ssh "$USER@$HOST" 'set -euo pipefail
-cd /opt/lab
-docker compose -f compose.yml pull
-docker compose -f compose.yml up -d
+          cd /opt/lab
+          docker compose -f compose.yml pull
+          docker compose -f compose.yml up -d
 
-keep_two() {
-  repo="$1"
-  mapfile -t tags < <(docker images "$repo" --format "{{.CreatedAt}}|{{.Repository}}:{{.Tag}}" | { grep -v ":<none>$" || true; } | sort -r | cut -d"|" -f2)
-  for ((i = 2; i < ${#tags[@]}; i++)); do
-    docker rmi "${tags[$i]}" || true
-  done
-}
+          keep_two() {
+            repo="$1"
+            mapfile -t tags < <(docker images "$repo" --format "${{ '{{.CreatedAt}}' }}|${{ '{{.Repository}}' }}:${{ '{{.Tag}}' }}" | { grep -v ":<none>$" || true; } | sort -r | cut -d"|" -f2)
+            for ((i = 2; i < ${#tags[@]}; i++)); do
+              docker rmi "${tags[$i]}" || true
+            done
+          }
 
-keep_two ghcr.io/keirweb/lab-nginx
-keep_two ghcr.io/keirweb/lab-backend
-docker image prune -f'
+          keep_two ghcr.io/keirweb/lab-nginx
+          keep_two ghcr.io/keirweb/lab-backend
+          docker image prune -f'
