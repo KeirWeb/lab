@@ -28,8 +28,14 @@ jobs:
           ssh "$USER@$HOST" 'set -euo pipefail
           cd /opt/lab
           docker compose -f compose.yml pull
-          docker compose -f compose.yml up -d
+          docker compose -f compose.yml up -d'
 
+      - name: prune old lab images
+        env:
+          HOST: ${{ secrets.PROD_HOST }}
+          USER: ${{ secrets.PROD_USER }}
+        run: |
+          ssh "$USER@$HOST" 'set -euo pipefail
           keep_two() {
             repo="$1"
             mapfile -t tags < <(docker images "$repo" --format "${{ '{{.CreatedAt}}' }}|${{ '{{.Repository}}' }}:${{ '{{.Tag}}' }}" | { grep -v ":<none>$" || true; } | sort -r | cut -d"|" -f2)
