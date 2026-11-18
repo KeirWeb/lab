@@ -1,6 +1,6 @@
 services:
   lab-nginx:
-    image: ghcr.io/keirweb/lab-nginx:9c73a5c
+    image: ghcr.io/keirweb/lab-nginx:06ce2ce
     ports: ["127.0.0.1:${HOST_PORT:-8090}:80"]
     # ports: ["8090:80"]
     restart: unless-stopped
@@ -16,7 +16,7 @@ services:
   backend:
     # deploy:
     #   replicas: 3
-    image: ghcr.io/keirweb/lab-backend:9c73a5c
+    image: ghcr.io/keirweb/lab-backend:06ce2ce
     restart: unless-stopped
     mem_limit: 64m
 
