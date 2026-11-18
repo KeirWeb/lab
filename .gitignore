@@ -8,3 +8,6 @@ nginx-lab/htpasswd
 nginx-lab/certs/*.key
 nginx-lab/certs/*.crt
 k8s
+
+
+.env

@@ -17,13 +17,16 @@ services:
       retries: 3
 
   backend:
-    deploy:
-      replicas: 3
+    # deploy:
+    #   replicas: 3
     build:
       context: .
       dockerfile: Dockerfile.backend
     image: lab-backend:local
     restart: unless-stopped
+
+    env_file:
+      - .env
 
     mem_limit: 64m
     healthcheck:

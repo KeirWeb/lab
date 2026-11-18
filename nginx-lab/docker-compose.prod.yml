@@ -14,11 +14,15 @@ services:
       retries: 3
 
   backend:
-    deploy:
-      replicas: 3
+    # deploy:
+    #   replicas: 3
     image: ghcr.io/keirweb/lab-backend:9c73a5c
     restart: unless-stopped
     mem_limit: 64m
+
+    env_file:
+      - .env
+
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/health"]
       interval: 5s

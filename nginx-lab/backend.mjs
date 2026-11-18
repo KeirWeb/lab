@@ -26,7 +26,7 @@ const server = createServer((req, res) => {
   ].join("\n");
 
   res.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
-  console.log("backend ok");
+  console.log("backend ok", process.env.APP_MESSAGE);
 
   res.end(body);
 });
